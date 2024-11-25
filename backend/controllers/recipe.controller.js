@@ -18,6 +18,45 @@ export async function getAllRecipes(req, res) {
     }
 }
 
+export async function searchRecipes(req, res) {
+    try {
+        const { name, tags, ingredients } = req.query;
+        
+        // Build query object for MongoDB
+        const query = {};
+        
+        if (name) {
+            query.title = { $regex: name, $options: 'i' };
+        }
+        
+        if (tags) {
+            const tagArray = tags.split(',').map(tag => tag.trim().toLowerCase());
+            query.tags = { $in: tagArray };
+        }
+        
+        if (ingredients) {
+            const ingredientArray = ingredients.split(',').map(ing => ing.trim().toLowerCase());
+            query['ingredients.name'] = { 
+                $in: ingredientArray
+            };
+        }
+
+        const recipes = await Recipe.find(query);
+
+        return res.status(200).json({
+            success: true,
+            count: recipes.length,
+            data: recipes
+        });
+    } catch (error) {
+        console.log("Error in searchRecipes controller", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+}
+
 export async function getUserRecipes(req, res) {    
     const { uid } = req.params;
 

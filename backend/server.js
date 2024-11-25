@@ -4,7 +4,6 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route.js"
 import accountRoutes from "./routes/account.route.js"
 import recipeRoutes from "./routes/recipe.route.js"
-import searchRoutes from "./routes/search.route.js"
 import { ENV_VARS } from "./config/envVars.js";
 import { connectDB } from "./config/db.js";
 
@@ -19,8 +18,9 @@ app.use("/api/v1/account", accountRoutes)
 
 app.use("/api/v1/recipe", recipeRoutes)
 
-// TODO: search route
-app.use("/api/v1/search", searchRoutes)
+// TODO: extra features?
+// ...
+// ...
 
 const PORT = ENV_VARS.PORT;
 

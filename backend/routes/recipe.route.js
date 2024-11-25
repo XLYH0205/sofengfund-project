@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllRecipes, getUserRecipes, getRecipeById, createRecipe, updateRecipe, deleteRecipe } from "../controllers/recipe.controller.js";
+import { getAllRecipes, getUserRecipes, getRecipeById, createRecipe, updateRecipe, deleteRecipe, searchRecipes } from "../controllers/recipe.controller.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
@@ -7,6 +7,8 @@ const router = express.Router();
 router.post('/', protectRoute('user'), createRecipe);
 
 router.get('/', getAllRecipes);
+
+router.get('/search', searchRecipes);
 
 router.get('/:uid', protectRoute('user'), getUserRecipes);
 
