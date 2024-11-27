@@ -12,8 +12,8 @@ const router = express.Router();
 
 // Report creation and management routes
 router.post('/create', protectRoute(ROLES.USER), createReport);
-router.get('/', protectRoute(ROLES.MOD, ROLES.ADMIN), getAllReports);
-router.get('/:reportId', protectRoute(ROLES.MOD, ROLES.ADMIN), getReportById);
-router.put('/:reportId/status', protectRoute(ROLES.MOD, ROLES.ADMIN), updateReportStatus);
+router.get('/', protectRoute(ROLES.MOD), getAllReports);
+router.get('/:reportId', protectRoute(ROLES.MOD), getReportById);
+router.put('/:reportId/status', protectRoute(ROLES.MOD), updateReportStatus);
 
 export default router;
