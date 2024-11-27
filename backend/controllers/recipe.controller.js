@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 import { Recipe } from "../models/recipe.model.js"
 import { User } from "../models/user.model.js";
 
+/**
+ * @route   GET /api/v1/recipes
+ * @desc    Get all recipes
+ * @access  Public
+ */
 export async function getAllRecipes(req, res) {
     try {
         const recipes = await Recipe.find({});
@@ -18,6 +23,11 @@ export async function getAllRecipes(req, res) {
     }
 }
 
+/**
+ * @route   GET /api/v1/recipes/search?name=<replace here>&tags=<replace here>&ingredients=<replace here>
+ * @desc    Search for recipes by name, tags, or ingredients
+ * @access  Public
+ */
 export async function searchRecipes(req, res) {
     try {
         const { name, tags, ingredients } = req.query;
@@ -57,10 +67,23 @@ export async function searchRecipes(req, res) {
     }
 }
 
+/**
+ * @route   GET /api/v1/recipes/:uid
+ * @desc    Get recipes by user ID
+ * @access  User, Moderator, Administrator
+ */
 export async function getUserRecipes(req, res) {    
     const { uid } = req.params;
 
     try {
+        // check if user exists
+        const user = await User.findById(uid);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
         const recipes = await Recipe.find({ author: uid });  
             
         res.status(200).json({
@@ -76,6 +99,11 @@ export async function getUserRecipes(req, res) {
     }
 }
 
+/**
+ * @route   GET /api/v1/recipes/:id
+ * @desc    Get a recipe by ID
+ * @access  Public
+ */
 export async function getRecipeById(req, res) {
     const { id } = req.params;
     
@@ -94,6 +122,11 @@ export async function getRecipeById(req, res) {
     }
 }
 
+/**
+ * @route   POST /api/v1/recipes
+ * @desc    Create a new recipe
+ * @access  User
+ */
 export async function createRecipe(req, res) {
     const recipe = req.body;
     
@@ -135,6 +168,11 @@ export async function createRecipe(req, res) {
     }
 }
 
+/**
+ * @route   PUT /api/v1/recipes/:id
+ * @desc    Update a recipe by ID
+ * @access  User, Moderator
+ */
 export async function updateRecipe(req, res) {
     const { id } = req.params;
     const recipe = req.body;
@@ -170,6 +208,11 @@ export async function updateRecipe(req, res) {
     }
 }
 
+/**
+ * @route   DELETE /api/v1/recipes/:id
+ * @desc    Delete a recipe by ID
+ * @access  User, Moderator
+ */
 export async function deleteRecipe(req, res) {
     const { id } = req.params;
     
@@ -178,7 +221,7 @@ export async function deleteRecipe(req, res) {
         await Recipe.findByIdAndDelete(id);
         res.status(200).json({
             success: true,
-            message: "Recipe deleted successfully"
+            message: "Recipe deleted successfully" 
         })        
 
     } catch (error) {

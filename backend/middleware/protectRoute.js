@@ -3,6 +3,7 @@ import { ENV_VARS } from "../config/envVars.js";
 import { User } from "../models/user.model.js";
 import { Admin } from "../models/admin.model.js";
 import { Moderator } from "../models/moderator.model.js";
+import { ROLES } from "../constants/roles.constants.js";
 
 export const protectRoute = (...allowedRoles) => {
     return async (req, res, next) => {
@@ -37,16 +38,16 @@ export const protectRoute = (...allowedRoles) => {
             // check if account exists
             let account;
             switch (decoded.role) {
-                case 'guest':
+                case ROLES.GUEST:
                     account = { _id: "guest" };
                     break;
-                case 'user':
+                case ROLES.USER:
                     account = await User.findById(decoded.accountId).select("-password");
                     break;
-                case 'admin':
+                case ROLES.ADMIN:
                     account = await Admin.findById(decoded.accountId).select("-password");
                     break;
-                case 'moderator':
+                case ROLES.MOD:
                     account = await Moderator.findById(decoded.accountId).select("-password");
                     break;
                 default:
@@ -68,7 +69,7 @@ export const protectRoute = (...allowedRoles) => {
 
             next();
 
-        } catch (error) {
+        } catch (error) { 
             console.log("Error in protectRoute middleware", error);
             res.status(500).json({
                 success: false,

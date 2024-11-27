@@ -1,8 +1,14 @@
+import { ROLES } from "../constants/roles.constants.js";
 import { Admin } from "../models/admin.model.js";
 import { Moderator } from "../models/moderator.model.js";
 import { User } from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 
+/**
+ * @route   PUT /api/v1/account/:id
+ * @desc    Update profile including username, email, password, and avatar.
+ * @access  User, Administrator, Moderator
+ */
 export async function updateProfile(req, res) {
     try {
         const { id } = req.params;
@@ -10,9 +16,9 @@ export async function updateProfile(req, res) {
         const role = req.role;
 
         let Model;
-        if (role === 'user') Model = User;
-        else if (role === 'admin') Model = Admin;
-        else if (role === 'moderator') Model = Moderator;
+        if (role === ROLES.USER) Model = User;
+        else if (role === ROLES.ADMIN) Model = Admin;
+        else if (role === ROLES.MODERATOR) Model = Moderator;
 
         // provided fields
         const updateFields = {};
