@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import { useState } from 'react'
+import { ROLES } from '../../../backend/constants/roles.constants'
 
 
 const LandingPage = () => {
@@ -42,9 +43,18 @@ const LandingPage = () => {
                 </form>
 
                 {/* Sign In */}
-                <Link to="/login" className="text-white bg-gray-600 py-1 px-2 rounded">Sign In</Link>
+                <Link to="/login/user" className="text-white bg-gray-600 py-1 px-2 rounded">Sign In</Link>
             </header>
 
+            <div className="text-center text-gray-400">
+                {"Administrator Dashboard"}
+                <Link to={`/login/${ROLES.ADMIN}`} className="text-red-500 hover:underline">Sign in</Link>
+            </div>
+
+            <div className="text-center text-gray-400">
+                {"Moderator Dashboard"}
+                <Link to={`/login/${ROLES.MOD}`} className="text-red-500 hover:underline">Sign in</Link>
+            </div>
         </div>
     )
 }

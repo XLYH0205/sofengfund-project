@@ -5,6 +5,7 @@ import bcryptjs from "bcryptjs";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 import { ROLES } from "../constants/roles.constants.js";
 
+// TODO: this maybe no needed
 /**
  * @route   POST /api/v1/guest
  * @desc    Create a guest user 
@@ -38,11 +39,11 @@ export async function authCheck(req, res) {
         })
     } catch (error) {
         console.log("Error in authCheck controller: " + error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Internal server error" 
+        res.status(500).json({
+            success: false,
+            message: "Internal server error"
         });
-        
+
     }
 }
 
@@ -165,9 +166,10 @@ export async function signup(req, res) {
             success: true,
             // this account returns accountData without pw
             account: {
-                ...newAccount._doc, 
+                ...newAccount._doc,
                 password: ""
             },
+            role,
             message: "Account created successfully"
         });
     } catch (error) {
@@ -187,7 +189,32 @@ export async function signup(req, res) {
 export async function login(req, res) {
     try {
         const { role } = req.params;
-        const { email, password } = req.body;
+        const { email, password, key } = req.body;
+
+        if (role == ROLES.ADMIN || role == ROLES.MOD) {
+
+            // check if key is provided
+            if (!key) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Key is required"
+                });
+            }
+
+            // check if key is correct
+            if (role == ROLES.ADMIN && key !== process.env.ADMIN_KEY) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid admin key"
+                });
+            }
+            else if (role == ROLES.MOD && key !== process.env.MOD_KEY) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid moderator key"
+                });
+            }
+        }
 
         // check if all fields are filled
         if (!email || !password) {
@@ -234,6 +261,7 @@ export async function login(req, res) {
                 ...account._doc,
                 password: ""
             },
+            role,
             message: "Login successful"
         })
 
