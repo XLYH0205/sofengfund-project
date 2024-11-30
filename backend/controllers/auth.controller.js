@@ -64,8 +64,7 @@ export async function signup(req, res) {
             });
         }
 
-        if (role == ROLES.ADMIN || role == ROLES.MOD) {
-
+        if (role === ROLES.ADMIN || role === ROLES.MOD) {
             // check if key is provided
             if (!key) {
                 return res.status(400).json({
@@ -75,13 +74,13 @@ export async function signup(req, res) {
             }
 
             // check if key is correct
-            if (role == ROLES.ADMIN && key !== process.env.ADMIN_KEY) {
+            if (role === ROLES.ADMIN && key !== process.env.ADMIN_KEY) {
                 return res.status(400).json({
                     success: false,
                     message: "Invalid admin key"
                 });
             }
-            else if (role == ROLES.MOD && key !== process.env.MOD_KEY) {
+            else if (role === ROLES.MOD && key !== process.env.MOD_KEY) {
                 return res.status(400).json({
                     success: false,
                     message: "Invalid moderator key"
@@ -191,8 +190,7 @@ export async function login(req, res) {
         const { role } = req.params;
         const { email, password, key } = req.body;
 
-        if (role == ROLES.ADMIN || role == ROLES.MOD) {
-
+        if (role === ROLES.ADMIN || role === ROLES.MOD) {
             // check if key is provided
             if (!key) {
                 return res.status(400).json({
@@ -202,13 +200,13 @@ export async function login(req, res) {
             }
 
             // check if key is correct
-            if (role == ROLES.ADMIN && key !== process.env.ADMIN_KEY) {
+            if (role === ROLES.ADMIN && key !== process.env.ADMIN_KEY) {
                 return res.status(400).json({
                     success: false,
                     message: "Invalid admin key"
                 });
             }
-            else if (role == ROLES.MOD && key !== process.env.MOD_KEY) {
+            else if (role === ROLES.MOD && key !== process.env.MOD_KEY) {
                 return res.status(400).json({
                     success: false,
                     message: "Invalid moderator key"
@@ -225,13 +223,13 @@ export async function login(req, res) {
         }
 
         let account;
-        if (role == ROLES.USER) {
+        if (role === ROLES.USER) {
             account = await User.findOne({ email: email });
         }
-        else if (role == ROLES.ADMIN) {
+        else if (role === ROLES.ADMIN) {
             account = await Admin.findOne({ email: email });
         }
-        else if (role == ROLES.MOD) {
+        else if (role === ROLES.MOD) {
             account = await Moderator.findOne({ email: email });
         }
 
