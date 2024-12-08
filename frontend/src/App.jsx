@@ -39,54 +39,10 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={!account ? <LandingPage /> : <Navigate to={`/${role}`} />} />
+        <Route path='/' element={account ? <HomePage /> : <LandingPage />} />
+        <Route path="/signup/:role" element={role ? <Navigate to="/" /> : <SignupPage />} />
+        <Route path="/login/:role" element={role ? <Navigate to="/" /> : <LoginPage />} />
         
-        <Route 
-          path="/signup/:role" 
-          element={
-            role ? (
-              role === 'admin' ? <Navigate to="/admin" /> :
-              role === 'moderator' ? <Navigate to="/moderator" /> :
-              <Navigate to="/user" />
-            ) : (
-              <SignupPage />
-            )
-          } 
-        />
-        
-        <Route 
-          path="/login/:role" 
-          element={
-            role ? (
-              role === 'admin' ? <Navigate to="/admin" /> :
-              role === 'moderator' ? <Navigate to="/moderator" /> :
-              <Navigate to="/user" />
-            ) : (
-              <LoginPage />
-            )
-          } 
-        />
-
-        {/* Dashboard Routes */}
-        <Route 
-          path="/user" 
-          element={
-            role === 'user' ? <HomePage /> : <Navigate to="/" />
-          } 
-        />
-        <Route 
-          path="/admin" 
-          element={
-            role === 'admin' ? <AdminDashboard /> : <Navigate to="/" />
-          } 
-        />
-        <Route 
-          path="/moderator" 
-          element={
-            role === 'moderator' ? <ModeratorDashboard /> : <Navigate to="/" />
-          } 
-        />
-
         <Route path="/discover" element={<DiscoverPage />} />
         <Route path='/*' element={<NotFoundPage />} />
       </Routes>
