@@ -12,18 +12,21 @@ import DiscoverPage from './pages/DiscoverPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
 import ModeratorDashboard from './pages/ModeratorDashboard.jsx'
+import AddRecipePage from './pages/AddRecipePage.jsx'
 
 function App() {
   const { account, role, isCheckingAuth, authCheck } = useAuthStore();
 
   useEffect(() => {
-    console.log("account1: ", account, "role1: ", role);
+    console.log("account1: ", account, "role1: ", role); //temp
     authCheck();
   }, [authCheck]);
 
+  // temp{----
   useEffect(() => {
     console.log("account2: ", account, "role2: ", role);
   }, [account, role]);
+  // -----}temp
 
   if (isCheckingAuth) {
     // TODO: loading screen
@@ -45,6 +48,8 @@ function App() {
         
         <Route path="/discover" element={<DiscoverPage />} />
         <Route path='/*' element={<NotFoundPage />} />
+
+        <Route path='/my/add-recipe' element={!role ? <Navigate to="/" /> : <AddRecipePage />} />
       </Routes>
 
       <Toaster />

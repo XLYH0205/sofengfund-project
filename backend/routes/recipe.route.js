@@ -2,12 +2,13 @@ import express from "express";
 import { getAllRecipes, getUserRecipes, getRecipeById, createRecipe, updateRecipe, deleteRecipe, searchRecipes } from "../controllers/recipe.controller.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 import { ROLES } from "../constants/roles.constants.js";
+import { uploadingSingleImage } from "../middleware/multer.middleware.js";
 
 const router = express.Router();
 
-router.post('/', protectRoute(ROLES.USER), createRecipe);
+router.post('/', protectRoute(ROLES.USER), uploadingSingleImage, createRecipe);
 
-router.get('/', getAllRecipes);
+router.get('/all', getAllRecipes);
 
 router.get('/search', searchRecipes);
 
